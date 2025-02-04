@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if (("$#" != 1)); then
+	echo "[*] Usage: extract-ports <nmap-file>"
+	exit 1
+fi
+
 # Extract port numbers
 filect=$(grep -oP "(?<=Ports:).*" "$1" | tr "," "\n" | awk -F'/' '{print $1}' | tr '\n' ',' | tr -d ' ' | sed 's/,$//')
 
