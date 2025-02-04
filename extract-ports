@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Extract port numbers
+filect=$(grep -oP "(?<=Ports:).*" "$1" | tr "," "\n" | awk -F'/' '{print $1}' | tr '\n' ',' | tr -d ' ' | sed 's/,$//')
+
+# Ensure we can write to the current directory
+touch pts.tmp || { echo "Error: Cannot create pts.tmp"; exit 1; }
+
+# Set trap to clean up pts.tmp on exit
+trap 'rm -f pts.tmp' EXIT
+
+echo "[*] Creating pts.tmp..."
+echo "$filect" > pts.tmp
+
+echo "[*] Copying ports to clipboard..."
+xclip -sel clip < pts.tmp
+
+echo "[*] Removing pts.tmp..."
+rm pts.tmp
+
